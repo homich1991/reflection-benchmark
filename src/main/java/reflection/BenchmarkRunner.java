@@ -1,5 +1,6 @@
 package reflection;
 
+import objects.Child1;
 import objects.ObjectRealCreatorWithConstructor;
 import objects.ObjectRealCreatorWithReflection;
 import org.openjdk.jmh.annotations.Benchmark;
@@ -9,6 +10,7 @@ import org.openjdk.jmh.annotations.Mode;
 import org.openjdk.jmh.annotations.OutputTimeUnit;
 import org.openjdk.jmh.annotations.Scope;
 import org.openjdk.jmh.annotations.State;
+import org.openjdk.jmh.infra.Blackhole;
 
 import java.util.concurrent.TimeUnit;
 
@@ -23,12 +25,20 @@ public class BenchmarkRunner {
 
 
     @Benchmark
-    public void getObjectWithConstructor() {
-        objectRealCreatorWithConstructor.getObject();
+    public void getObjectWithConstructor(Blackhole bh) {
+        Child1 object = objectRealCreatorWithConstructor.getObject();
+        bh.consume(object);
     }
 
     @Benchmark
-    public void getObjectWithReflection() {
-        objectRealCreatorWithReflection.getObject();
+    public void getObjectWithReflection(Blackhole bh) {
+        Child1 object = objectRealCreatorWithReflection.getObject();
+        bh.consume(object);
+    }
+
+    @Benchmark
+    public void getObjectWithReflectionWithCachedConstructor(Blackhole bh) {
+        Child1 object = objectRealCreatorWithReflection.getObjectWithCachedConstructor();
+        bh.consume(object);
     }
 }
